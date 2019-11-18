@@ -1,0 +1,139 @@
+#include <iostream>
+#include<conio.h>
+using namespace std;
+
+struct No{
+	int fecha;
+	No *proximo;
+};
+
+void menu();
+void inserir(No *&,int);
+void mostrar(No *);
+void buscar(No *,int);
+void remover(No *&,int);
+
+No *lista = NULL; 
+
+int main(){
+	menu();
+	getch();
+	return 0;
+}
+
+void menu(){
+	int opcao, guarda;
+	
+	do{
+		cout << "----------  CHOOSE THE OPTION NUMBER  ----------" << endl << endl;
+		cout << "1. INSERT     2. SEARCH     3. REMOVE     4. EXIT" << endl << endl;
+		cin>>opcao;
+		
+		switch(opcao){
+			case 1: cout << "---  SELECTED OPTION:  INSERT  ---" << endl << endl;
+					cout << "Type the number: ";
+					cin >> guarda;
+					inserir(lista, guarda);
+					mostrar(lista);  
+					cout << endl;   
+					break;
+			
+			case 2: cout << "---  SELECTED OPTION:  SEARCH  ---" << endl << endl;
+					cout << "Type the number to be SEARCHED: ";
+					cin >> guarda;
+					buscar(lista,guarda);
+					mostrar(lista);  
+					cout << endl;
+					break;
+			
+			case 3: cout << "---  SELECTED OPTION::  REMOVE  ---" << endl << endl;
+					cout << "Type the number to be REMOVED: ";
+					cin >> guarda;
+					remover(lista,guarda);  
+					cout << endl;
+					mostrar(lista);  
+					cout << endl;
+					break;
+		}
+		}while(opcao !=4);  
+}
+
+void inserir(No *&lista, int n){ 
+	No *novo_No = new No();
+	novo_No->fecha = n;
+	No *aux1 = lista;
+	No *aux2;
+	
+	while((aux1 != NULL) && (aux1->fecha < n)){
+		aux2 = aux1;
+		aux1 = aux1->proximo;
+	}
+	if(lista == aux1){
+		lista = novo_No;	
+	}
+	else{
+		aux2->proximo = novo_No;
+	}
+	novo_No->proximo = aux1;
+	
+	cout << "Number INSERTED successfully!"<<endl;
+}
+
+void mostrar(No *lista){ 
+	No *atual = new No();
+	atual = lista;
+	
+	cout << endl << "List: [  ";
+	while(atual !=NULL){
+		cout<<atual->fecha<<",  ";  
+		atual = atual->proximo;
+	}
+	cout << "]" << endl;
+}
+void buscar(No *lista, int n){  
+	bool band = false;
+	No *atual = new No();
+	atual = lista;
+	
+	while((atual != NULL) && (atual->fecha <= n)){
+		if(atual -> fecha == n){
+			band = true;
+	}
+	atual =atual ->proximo;
+}
+	if(band == true){  
+		cout<<"Number FOUND!" << endl;  
+		
+	}
+	else{
+		cout<<"Number NOT FOUND" << endl;
+
+	}
+}
+
+void remover(No *&lista, int n){   
+	if(lista != NULL){
+		No *aux_apagar;
+		No *anterior = NULL;
+		aux_apagar = lista;
+		
+		while((aux_apagar != NULL) && (aux_apagar ->fecha != n)){
+			anterior = aux_apagar;
+			aux_apagar = aux_apagar->proximo;
+		}
+		
+		if(aux_apagar == NULL){
+			cout<<"ELEMENT NOT FOUND";
+		}
+		
+		else if (anterior == NULL){
+			lista = lista->proximo;
+			delete aux_apagar;	
+		}
+		
+		else{
+			anterior->proximo = aux_apagar->proximo;
+			delete aux_apagar;
+		}
+	}
+}
